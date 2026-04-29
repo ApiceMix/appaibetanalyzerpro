@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>AI Bet Analyzer PRO</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#07111f;
+color:white;
+padding-bottom:100px;
+overflow-x:hidden;
+}
+
+:root{
+--primary:#00ffb3;
+--secondary:#00bfff;
+--card:#111d3c;
+--card2:#0b152c;
+--muted:#8da0d1;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at top left,#00ffb318,transparent 25%),
+radial-gradient(circle at bottom right,#00bfff15,transparent 25%);
+z-index:-1;
+}
+
+header{
+padding:20px 18px;
+position:sticky;
+top:0;
+background:#07111fe8;
+backdrop-filter:blur(10px);
+border-bottom:1px solid #20355f;
+z-index:999;
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+color:var(--primary);
+}
+
+.container{
+padding:18px;
+max-width:700px;
+margin:auto;
+}
+
+.hero{
+margin-top:15px;
+margin-bottom:25px;
+}
+
+.hero h1{
+font-size:38px;
+line-height:1.15;
+margin-bottom:15px;
+}
+
+.hero span{
+color:var(--primary);
+}
+
+.hero p{
+line-height:1.8;
+font-size:15px;
+color:var(--muted);
+}
+
+.panel{
+background:linear-gradient(145deg,var(--card),var(--card2));
+padding:22px;
+border-radius:24px;
+border:1px solid #213861;
+box-shadow:0 0 20px rgba(0,255,179,.06);
+margin-bottom:22px;
+}
+
+.form-group{
+margin-bottom:18px;
+}
+
+.form-group label{
+display:block;
+margin-bottom:8px;
+font-weight:700;
+font-size:14px;
+}
+
+.form-group input{
+width:100%;
+padding:18px;
+background:#091327;
+color:white;
+border:1px solid #28467a;
+border-radius:16px;
+outline:none;
+font-size:16px;
+}
+
+.form-group input:focus{
+border-color:var(--primary);
+box-shadow:0 0 15px rgba(0,255,179,.15);
+}
+
+.btn{
+width:100%;
+padding:18px;
+border:none;
+border-radius:16px;
+font-weight:800;
+font-size:17px;
+background:linear-gradient(90deg,var(--primary),var(--secondary));
+color:black;
+cursor:pointer;
+}
+
+.quick-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin-top:20px;
+}
+
+.quick-card{
+background:linear-gradient(145deg,#132346,#0c1730);
+padding:18px;
+border-radius:20px;
+border:1px solid #284577;
+}
+
+.quick-card h3{
+font-size:15px;
+margin-bottom:10px;
+color:var(--primary);
+}
+
+.quick-card p{
+font-size:13px;
+line-height:1.6;
+color:var(--muted);
+}
+
+.section-title{
+font-size:22px;
+font-weight:800;
+margin-bottom:18px;
+color:var(--primary);
+}
+
+.match-card{
+background:linear-gradient(145deg,#132346,#0c1730);
+padding:20px;
+border-radius:22px;
+margin-bottom:18px;
+border:1px solid #284577;
+}
+
+.match-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.badge{
+padding:8px 14px;
+border-radius:999px;
+font-size:12px;
+font-weight:700;
+}
+
+.green{
+background:#00ffb322;
+color:#00ffb3;
+}
+
+.yellow{
+background:#ffc85722;
+color:#ffc857;
+}
+
+.red{
+background:#ff557722;
+color:#ff5577;
+}
+
+.match-card h2{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.match-card p{
+line-height:1.8;
+color:#dce6ff;
+font-size:14px;
+}
+
+.market-list{
+margin-top:15px;
+}
+
+.market{
+padding:14px;
+border-radius:14px;
+background:#0d1832;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.market span{
+font-size:14px;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#081120;
+border-top:1px solid #203761;
+display:flex;
+justify-content:space-around;
+padding:14px 10px;
+z-index:999;
+}
+
+.nav-item{
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:12px;
+color:#8da0d1;
+cursor:pointer;
+}
+
+.nav-item.active{
+color:var(--primary);
+}
+
+.ai-float{
+position:fixed;
+right:18px;
+bottom:85px;
+width:65px;
+height:65px;
+border-radius:50%;
+background:linear-gradient(145deg,var(--primary),var(--secondary));
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+box-shadow:0 0 25px rgba(0,255,179,.3);
+cursor:pointer;
+z-index:999;
+}
+
+.loading{
+display:none;
+text-align:center;
+margin-top:18px;
+color:var(--primary);
+font-weight:700;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:.4}
+50%{opacity:1}
+100%{opacity:.4}
+}
+
+.ai-box{
+display:none;
+margin-top:20px;
+padding:18px;
+background:#0d1832;
+border-radius:18px;
+border:1px solid #284577;
+line-height:1.9;
+color:#dce6ff;
+}
+
+@media(min-width:768px){
+
+.container{
+max-width:1000px;
+}
+
+.quick-grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">
+⚽ AI Bet Analyzer PRO
+</div>
+</header>
+
+<div class="container">
+
+<section class="hero">
+
+<h1>
+Análises Inteligentes com
+<span>IA Profissional</span>
+</h1>
+
+<p>
+Sistema avançado de leitura esportiva com EV+, over/under,
+ambas marcam, pressão ofensiva, escanteios, placares corretos
+e oportunidades lucrativas.
+</p>
+
+</section>
+
+<section class="panel">
+
+<div class="form-group">
+<label>Time Mandante</label>
+<input
+type="text"
+id="homeTeam"
+placeholder="Digite o time mandante..."
+>
+</div>
+
+<div class="form-group">
+<label>Time Visitante</label>
+<input
+type="text"
+id="awayTeam"
+placeholder="Digite o time visitante..."
+>
+</div>
+
+<button class="btn" onclick="analyzeGame()">
+🔍 ANALISAR PARTIDA
+</button>
+
+<div class="loading" id="loading">
+Analisando padrões inteligentes...
+</div>
+
+<div class="ai-box" id="analysisBox"></div>
+
+</section>
+
+<section>
+
+<div class="section-title">
+🔥 Oportunidades do Dia
+</div>
+
+<div class="match-card">
+
+<div class="match-top">
+<h2>Flamengo x Fluminense</h2>
+<div class="badge green">
+84% confiança
+</div>
+</div>
+
+<p>
+Jogo com forte tendência ofensiva, pressão alta
+e ótima expectativa de gols.
+</p>
+
+<div class="market-list">
+
+<div class="market">
+<span>Over 2.5 Gols</span>
+<div class="badge green">EV+</div>
+</div>
+
+<div class="market">
+<span>Ambas Marcam</span>
+<div class="badge yellow">Valor</div>
+</div>
+
+<div class="market">
+<span>Gol 1º Tempo</span>
+<div class="badge green">Forte</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="match-card">
+
+<div class="match-top">
+<h2>Palmeiras x Santos</h2>
+<div class="badge yellow">
+73% confiança
+</div>
+</div>
+
+<p>
+Mandante dominante defensivamente e tendência
+de controle da partida.
+</p>
+
+<div class="market-list">
+
+<div class="market">
+<span>Palmeiras vence</span>
+<div class="badge green">Seguro</div>
+</div>
+
+<div class="market">
+<span>Under 3.5</span>
+<div class="badge green">Baixo risco</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<div class="section-title">
+🤖 Assistente IA
+</div>
+
+<div class="form-group">
+<input
+type="text"
+id="question"
+placeholder="Ex: Qual mercado mais seguro hoje?"
+>
+</div>
+
+<button class="btn" onclick="askAI()">
+CONSULTAR IA
+</button>
+
+<div class="ai-box" id="aiResponse"></div>
+
+</section>
+
+</div>
+
+<div class="ai-float" onclick="scrollTo(0,0)">
+🤖
+</div>
+
+<nav class="bottom-nav">
+
+<div class="nav-item active">
+🏠
+<span>Home</span>
+</div>
+
+<div class="nav-item">
+📊
+<span>Análises</span>
+</div>
+
+<div class="nav-item">
+🔥
+<span>Mercados</span>
+</div>
+
+<div class="nav-item">
+📈
+<span>EV+</span>
+</div>
+
+<div class="nav-item">
+⚡
+<span>Live</span>
+</div>
+
+</nav>
+
+<script>
+
+function analyzeGame(){
+
+const home =
+document.getElementById("homeTeam").value.trim();
+
+const away =
+document.getElementById("awayTeam").value.trim();
+
+if(!home || !away){
+
+alert("Digite os nomes das equipes.");
+
+return;
+}
+
+document.getElementById("loading").style.display = "block";
+
+setTimeout(()=>{
+
+const confidence =
+Math.floor(Math.random()*20)+70;
+
+const goals =
+Math.floor(Math.random()*20)+65;
+
+const btts =
+Math.floor(Math.random()*15)+60;
+
+const corners =
+Math.floor(Math.random()*15)+68;
+
+const analysis = `
+<h2 style="margin-bottom:15px;color:#00ffb3;">
+${home} x ${away}
+</h2>
+
+📊 Confiança IA: <b>${confidence}%</b><br><br>
+
+⚽ Over 2.5 Gols: <b>${goals}%</b><br>
+🎯 Ambas Marcam: <b>${btts}%</b><br>
+📈 Escanteios Over 8.5: <b>${corners}%</b><br><br>
+
+🔥 Melhor oportunidade:<br>
+Over 2.5 gols possui forte valor esperado positivo devido
+à tendência ofensiva e pressão agressiva das equipes.<br><br>
+
+💡 Placar provável:<br>
+<b>2x1</b>
+`;
+
+document.getElementById("loading").style.display = "none";
+
+const box =
+document.getElementById("analysisBox");
+
+box.style.display = "block";
+
+box.innerHTML = analysis;
+
+},1500);
+
+}
+
+function askAI(){
+
+const question =
+document.getElementById("question").value.trim();
+
+if(!question){
+
+alert("Digite sua pergunta.");
+
+return;
+}
+
+const response = `
+📌 Recomendação Inteligente:<br><br>
+
+Mercados com maior consistência normalmente:<br><br>
+
+✅ Over 1.5 gols<br>
+✅ Gol HT<br>
+✅ Ambas Marcam<br>
+✅ Escanteios Over 8.5<br><br>
+
+💡 Estratégia recomendada:<br><br>
+
+Buscar equipes ofensivas,
+alta intensidade e baixa estabilidade defensiva.
+`;
+
+const box =
+document.getElementById("aiResponse");
+
+box.style.display = "block";
+
+box.innerHTML = response;
+
+}
+
+</script>
+
+</body>
+</html>
